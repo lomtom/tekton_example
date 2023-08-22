@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: kaniko-task-run
+spec:
+  taskRef:
+    name: kaniko
+  params:
+    - name: url
+      value: "https://gitee.com/lomtom/demo-nodejs.git"
+    - name: dockerfile
+      value: "Dockerfile"
+    - name: context
+      value: "./"
+    - name: image
+      value: "swr.cn-east-3.myhuaweicloud.com/lomtom-test/lomtom:temp"
+  workspaces:
+    - name: source
+      emptyDir: {}
+    - name: docker-config
+      secret:
+        secretName: pull-secret

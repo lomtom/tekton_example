@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: workspace-task-run
+spec:
+  taskRef:
+    name: workspace
+  params:
+    - name: url
+      value: "https://gitee.com/lomtom/demo-nodejs.git"
+  workspaces:
+    - name: source
+      emptyDir: {}

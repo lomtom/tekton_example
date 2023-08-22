@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: multi-task
+spec:
+  params:
+    - name: url
+      type: string
+  workspaces:
+    - name: source
+  tasks:
+    - name: task-clone
+      taskRef:
+        name: multi-task-clone
+      params:
+        - name: url
+          value: $(params.url)
+      workspaces:
+        - name: source
+          workspace: source
+    - name: task-build
+      taskRef:
+        name: multi-task-build
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - task-clone

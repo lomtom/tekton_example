@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: param-task-run
+spec:
+  taskRef:
+    name: param
+  params:
+    - name: url
+      value: "https://gitee.com/lomtom/demo-nodejs.git"
+    - name: branch
+      value: "main"

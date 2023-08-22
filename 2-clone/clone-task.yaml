@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: clone
+spec:
+  steps:
+    - name: clone
+      image: alpine/git
+      script: |
+        git clone https://gitee.com/lomtom/demo-nodejs.git -b main /workspace/source
+        ls /workspace/source

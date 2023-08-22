@@ -1,0 +1,35 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name:  multi-task-docker
+spec:
+  volumes:
+    - name: docker-socket
+      hostPath:
+        path: /var/run/docker.sock
+        type: Socket
+  params:
+    - name: dockerfile
+      description: Dockerfile path
+      type: string
+    - name: context
+      description: Docker build context
+      type: string
+    - name: image
+      description: Docker image name
+      type: string
+  workspaces:
+    - name: source
+      description: code source
+      mountPath: /workspace/source
+  steps:
+    - name: docker-build
+      image: docker:23.0
+      workingDir: $(workspaces.source.path)
+      volumeMounts:
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+      script: |
+        docker build -t $(params.image) -f  $(params.dockerfile) $(params.context) --load
+        docker login swr.cn-east-3.myhuaweicloud.com -u cn-east-3@IH4HUI17KZVIGGNU1OKC -p ccdba0f7772f1e758721155280f719bdc13936ae324de368cff1a6076b8be350
+        docker push $(params.image)

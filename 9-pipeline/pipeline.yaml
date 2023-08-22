@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline
+spec:
+  params:
+    - name: url
+      type: string
+  workspaces:
+    - name: source
+  tasks:
+    - name: pipeline-task
+      taskRef:
+        name: pipeline
+      params:
+        - name: url
+          value: $(params.url)
+      workspaces:
+        - name: source
+          workspace: source

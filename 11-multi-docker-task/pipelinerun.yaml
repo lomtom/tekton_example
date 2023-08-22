@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: multi-docker-task-pipeline-run
+spec:
+  pipelineRef:
+    name: multi-docker-task
+  params:
+    - name: url
+      value: "https://gitee.com/lomtom/demo-nodejs.git"
+    - name: dockerfile
+      value: "Dockerfile"
+    - name: context
+      value: "./"
+    - name: image
+      value: "swr.cn-east-3.myhuaweicloud.com/lomtom-test/lomtom:temp"
+  workspaces:
+    - name: source
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          storageClassName: tekton-storage
+          resources:
+            requests:
+              storage: 5Gi

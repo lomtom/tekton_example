@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: steps-task-run
+spec:
+  taskRef:
+    name: steps
+  params:
+    - name: url
+      value: "https://gitee.com/lomtom/demo-nodejs.git"
+  workspaces:
+    - name: source
+      emptyDir: {}

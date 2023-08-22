@@ -1,0 +1,54 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: kaniko
+spec:
+  params:
+    - name: url
+      description: Repository URL to clone from.
+      type: string
+    - name: dockerfile
+      description: Dockerfile path
+      type: string
+    - name: context
+      description: Docker build context
+      type: string
+    - name: image
+      description: Docker image name
+      type: string
+  workspaces:
+    - name: source
+      description: code source
+      mountPath: /workspace/source
+    - name: docker-config
+      description: Includes a docker `config.json`
+      optional: true
+      mountPath: /kaniko/.docker
+  steps:
+    - name: clone-repo
+      image: alpine/git
+      workingDir: $(workspaces.source.path)
+      script: |
+        git clone $(params.url) $(workspaces.source.path)
+        ls /kaniko/.docker -al
+        ls
+    - name: npm-install
+      image: node:14.19
+      workingDir: $(workspaces.source.path)
+      script: |
+        npm config set registry https://mirrors.huaweicloud.com/repository/npm/
+        npm install
+    - name: npm-build
+      image: node:14.19
+      workingDir: $(workspaces.source.path)
+      script: |
+        npm run build
+        ls
+    - name: kaniko-build
+      image: bitnami/kaniko:1.13.0
+      workingDir: $(workspaces.source.path)
+      args:
+        - --dockerfile=$(params.dockerfile)
+        - --context=$(params.context)
+        - --destination=$(params.image)
+
