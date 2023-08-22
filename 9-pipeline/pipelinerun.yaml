@@ -7,7 +7,7 @@ spec:
     name: pipeline
   params:
     - name: url
-      value: "https://gitee.com/lomtom/demo-nodejs.git"
+      value: "https://github.com/lomtom/demo-nodejs.git"
   workspaces:
     - name: source
       emptyDir: {}

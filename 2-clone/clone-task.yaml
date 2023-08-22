@@ -7,5 +7,5 @@ spec:
     - name: clone
       image: alpine/git
       script: |
-        git clone https://gitee.com/lomtom/demo-nodejs.git -b main /workspace/source
+        git clone https://github.com/lomtom/demo-nodejs.git -b main /workspace/source
         ls /workspace/source
